@@ -13,13 +13,19 @@ def mostrar_menu():
     print("5. Verificar alertas de reorden")
     print("6. Reabastecer producto")
     print("7. Salir")
-
+    
+"""simula el consumo de productos de un inventario"""
 def agregar_producto(inventario):
+    while True:
     nombre_producto = input("Ingrese el nombre del nuevo producto: ")
+    if nombre_producto in inventario:
+        print("El producto ya existe en el inventario. Por favor, ingrese un nombre diferente.")
+            else:
+        break
     while True:
         try:
             cantidad = int(input("Ingrese la cantidad inicial del producto: "))
-            if cantidad <= 0:                                                                # se agrega manejo error para numeros negativos
+            if cantidad <= 0:                                       # se agrega manejo error para numeros negativos
                 raise ValueError("La cantidad inicial debe ser un número entero positivo.")
             break
         except ValueError:
@@ -27,7 +33,7 @@ def agregar_producto(inventario):
     while True:
         try:
             umbral = int(input("Ingrese el umbral minimo del producto: "))
-            if umbral <= 0:                                                                   # se agrega manejo error para numeros negativos
+            if umbral <= 0:                                            # se agrega manejo error para numeros negativos
                 raise ValueError("El umbral mínimo debe ser un número entero positivo.")
             break 
         except ValueError:
@@ -38,14 +44,14 @@ def agregar_producto(inventario):
 
 def simular_consumo(inventario):
     if not inventario:
-        print("\033[94m El inventario está vacío.\033[0m")
+        print("\033[94m El inventario está vacío.\033[0m") # si no hay nada en el diccionario se muestra el mensaje
         return
 
     for producto, detalles in inventario.items():
         cantidad_disponible, _ = detalles
         if cantidad_disponible == 0:
             print(f"\033[91m No hay suficiente {producto} en el inventario.\033[0m")
-            continue  # Continuar con el siguiente producto si el actual está agotado
+            continue                      # Continuar con el siguiente producto si el actual está agotado
         cantidad_consumida = min(random.randint(1, cantidad_disponible), cantidad_disponible) # Limita el valor aleatorio a la cantidad disponible
         print(f"Consumo simulado de {cantidad_consumida} unidades del producto '{producto}'.")
         inventario[producto][0] -= cantidad_consumida
@@ -64,7 +70,7 @@ def mostrar_reporte(inventario):
             print("{:<20} {:<10} {:<10}".format(producto, detalle[0], detalle[1]))
     
 def calcular_inventario_total(inventario):
-    total = sum(detalles[0] for detalles in inventario.values())
+    total = sum(detalles[0] for detalles in inventario.values()) # accede al primer elemento de cada tupla que es la cantidad disponible y la suma
     print(f"El valor total del inventario es: {total}")
 
 def verificar_alertas_reorden(inventario):
